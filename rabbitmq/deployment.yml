@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+  namespace: microservices
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: rabbitmq
+  template:
+    metadata:
+      labels:
+        app-name: rabbitmq
+    spec:
+      containers:
+        - name: rabbitmq
+          image: "rabbitmq:3.11-management"
+          ports:
+              - containerPort: 5672
+              - containerPort: 15672
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: regcred

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delivery
+  namespace: microservices
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: delivery
+  template:
+    metadata:
+      labels:
+        app-name: delivery
+    spec:
+      containers:
+        - name: delivery
+          image: "qanguyen/microservices-delivery:latest"
+          ports:
+            - containerPort: 8082
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: demo
+            - name: RABBITMQ_HOST
+              value: rabbitmq
+            - name: RABBITMQ_PORT
+              value: "5672"
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: regcred

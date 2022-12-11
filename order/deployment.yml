@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order
+  namespace: microservices
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: order
+  template:
+    metadata:
+      labels:
+        app-name: order
+    spec:
+      containers:
+        - name: order
+          image: "qanguyen/microservices-order:latest"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: demo
+            - name: PAYMENT_SERVICE_URL
+              value: http://payment:8081
+            - name: RABBITMQ_HOST
+              value: rabbitmq
+            - name: RABBITMQ_PORT
+              value: "5672"
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: regcred
